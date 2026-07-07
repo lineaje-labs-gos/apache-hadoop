@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -11,957 +12,1264 @@
   See the License for the specific language governing permissions and
   limitations under the License. See accompanying LICENSE file.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.hadoop</groupId>
-  <artifactId>hadoop-main</artifactId>
+  <parent>
+    <groupId>org.apache.hadoop</groupId>
+    <artifactId>hadoop-project-dist</artifactId>
+    <version>3.5.0</version>
+    <relativePath>../../hadoop-project-dist</relativePath>
+  </parent>
+  <artifactId>hadoop-common</artifactId>
   <version>3.5.0-lineaje-01</version>
-  <description>Apache Hadoop Main</description>
-  <name>Apache Hadoop Main</name>
-  <packaging>pom</packaging>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.cenqua.clover</groupId>
-        <artifactId>clover</artifactId>
-        <!-- Use the version needed by maven-clover-plugin -->
-        <version>3.0.2</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <distributionManagement>
-    <repository>
-      <id>${distMgmtStagingId}</id>
-      <name>${distMgmtStagingName}</name>
-      <url>${distMgmtStagingUrl}</url>
-    </repository>
-    <snapshotRepository>
-      <id>${distMgmtSnapshotsId}</id>
-      <name>${distMgmtSnapshotsName}</name>
-      <url>${distMgmtSnapshotsUrl}</url>
-    </snapshotRepository>
-    <site>
-      <id>apache.website</id>
-      <url>scpexe://people.apache.org/www/hadoop.apache.org/docs/r${project.version}</url>
-    </site>
-  </distributionManagement>
-  <repositories>
-    <repository>
-      <id>${distMgmtSnapshotsId}</id>
-      <name>${distMgmtSnapshotsName}</name>
-      <url>${distMgmtSnapshotsUrl}</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-    <repository>
-      <id>repository.jboss.org</id>
-      <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-  <licenses>
-    <license>
-      <name>Apache-2.0</name>
-      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
-  <organization>
-    <name>Apache Software Foundation</name>
-    <url>https://www.apache.org</url>
-  </organization>
+  <description>Apache Hadoop Common</description>
+  <name>Apache Hadoop Common</name>
+  <packaging>jar</packaging>
+
   <properties>
-    <!-- required as child projects with different version can't use ${project.version} -->
-    <hadoop.version>3.5.0</hadoop.version>
-    <docker.image>apache/hadoop:${project.version}</docker.image>
-    <distMgmtSnapshotsId>apache.snapshots.https</distMgmtSnapshotsId>
-    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
-    <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
-    <distMgmtStagingId>apache.staging.https</distMgmtStagingId>
-    <distMgmtStagingName>Apache Release Distribution Repository</distMgmtStagingName>
-    <distMgmtStagingUrl>https://repository.apache.org/service/local/staging/deploy/maven2</distMgmtStagingUrl>
-    <!-- platform encoding override -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- maven plugin versions -->
-    <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
-    <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
-    <maven-stylus-skin.version>1.5</maven-stylus-skin.version>
-    <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-    <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
-    <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
-    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
-    <restrict-imports.enforcer.version>2.0.0</restrict-imports.enforcer.version>
-    <maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
-    <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-    <maven-remote-resources-plugin.version>1.5</maven-remote-resources-plugin.version>
-    <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
-    <apache-rat-plugin.version>0.12</apache-rat-plugin.version>
-    <wagon-ssh.version>2.4</wagon-ssh.version>
-    <clover-maven-plugin.version>4.4.1</clover-maven-plugin.version>
-    <maven-bundle-plugin.version>2.5.0</maven-bundle-plugin.version>
-    <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-    <checkstyle.version>11.1.0</checkstyle.version>
-    <dependency-check-maven.version>7.1.1</dependency-check-maven.version>
-    <spotbugs.version>4.9.7</spotbugs.version>
-    <spotbugs-maven-plugin.version>4.9.7.0</spotbugs-maven-plugin.version>
-    <jsonschema2pojo-maven-plugin.version>1.1.1</jsonschema2pojo-maven-plugin.version>
-    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-    <cyclonedx.version>2.9.1</cyclonedx.version>
-    <docker-maven-plugin.version>0.29.0</docker-maven-plugin.version>
-    <shell-executable>bash</shell-executable>
-    <leveldbjni.group>org.fusesource.leveldbjni</leveldbjni.group>
-    <!--
-     Surefire option to not fail a build if -Dtest=NAME doesn't find a
-     test called NAME. This is needed when running integration tests through
-     failsafe, as setting -Dtest=none is the way to stop surefire
-     running all unit tests before the it.test option is picked up.
-    -->
-    <surefire.failIfNoSpecifiedTests>false</surefire.failIfNoSpecifiedTests>
-    <!-- define the Java language version used by the compiler -->
-    <javac.version>17</javac.version>
-    <!-- The java version enforced by the maven enforcer -->
-    <!-- more complex patterns can be used here, such as
-       [${javac.version})
-    for an open-ended enforcement
-    -->
-    <enforced.java.version>[${javac.version},)</enforced.java.version>
-    <enforced.maven.version>[3.3.0,)</enforced.maven.version>
+    <hadoop.component>common</hadoop.component>
+    <is.hadoop.component>true</is.hadoop.component>
+    <is.hadoop.common.component>true</is.hadoop.common.component>
+    <wsce.config.dir>../etc/hadoop</wsce.config.dir>
+    <wsce.config.file>wsce-site.xml</wsce.config.file>
   </properties>
-  <modules>
-    <module>hadoop-project</module>
-    <module>hadoop-project-dist</module>
-    <module>hadoop-assemblies</module>
-    <module>hadoop-maven-plugins</module>
-    <module>hadoop-common-project</module>
-    <module>hadoop-hdfs-project</module>
-    <module>hadoop-yarn-project</module>
-    <module>hadoop-mapreduce-project</module>
-    <module>hadoop-tools</module>
-    <module>hadoop-minicluster</module>
-    <module>hadoop-client-modules</module>
-    <module>hadoop-build-tools</module>
-    <module>hadoop-cloud-storage-project</module>
-    <module>hadoop-dist</module>
-  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.hadoop.thirdparty</groupId>
+      <artifactId>hadoop-shaded-protobuf_3_25</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-annotations</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop.thirdparty</groupId>
+      <artifactId>hadoop-shaded-guava</artifactId>
+    </dependency>
+    <!--Guava is required during runtime for curator-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet.jsp</groupId>
+      <artifactId>jakarta.servlet.jsp-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-server</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>javax.servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.activation</groupId>
+      <artifactId>jakarta.activation-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>javax.servlet-api</artifactId>
+          <groupId>javax.servlet</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util-ajax</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.reload4j</groupId>
+      <artifactId>reload4j</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-configuration2</artifactId>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-reload4j</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.re2j</groupId>
+      <artifactId>re2j</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Needed for compilation, though no longer in production.  -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <scope>${common.protobuf2.scope}</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-auth</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-auth</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-minikdc</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-recipes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.sshd</groupId>
+      <artifactId>sshd-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.sshd</groupId>
+      <artifactId>sshd-sftp</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ftpserver</groupId>
+      <artifactId>ftpserver-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-epoll</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kerby</groupId>
+      <artifactId>kerb-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>stax2-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.woodstox</groupId>
+      <artifactId>woodstox-core</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>mockwebserver3-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>dnsjava</groupId>
+      <artifactId>dnsjava</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.openssl</groupId>
+      <artifactId>wildfly-openssl</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.openssl</groupId>
+      <artifactId>wildfly-openssl-java</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial.snappy</groupId>
+      <artifactId>snappy-java</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>at.yawk.lz4</groupId>
+      <artifactId>lz4-java</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+      <version>4.2.5.Final</version>
+    </dependency>
+  </dependencies>
+
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>${maven-dependency-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>io.fabric8</groupId>
-          <artifactId>docker-maven-plugin</artifactId>
-          <version>${docker-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>${maven-enforcer-plugin.version}</version>
-          <configuration>
-            <rules>
-              <requireMavenVersion>
-                <version>${enforced.maven.version}</version>
-              </requireMavenVersion>
-              <requireJavaVersion>
-                <version>${enforced.java.version}</version>
-              </requireJavaVersion>
-            </rules>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>de.skuzzle.enforcer</groupId>
-              <artifactId>restrict-imports-enforcer-rule</artifactId>
-              <version>${restrict-imports.enforcer.version}</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>banned-illegal-imports</id>
-              <phase>process-sources</phase>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <rules>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use hadoop-thirdparty shaded instead of curator shaded</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.curator.shaded.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use hadoop-common provided Sets rather than Guava provided Sets</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.Sets</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.Sets.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use hadoop-common provided Lists rather than Guava provided Lists</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.Lists</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.Lists.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use hadoop-annotation provided VisibleForTesting rather than the one provided by Guava</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.annotations.VisibleForTesting</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternatives to Guava common classes</reason>
-                    <bannedImports>
-                      <bannedImport>com.google.common.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided BaseEncoding</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.io.BaseEncoding</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.io.BaseEncoding.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use java.nio.charset.StandardCharsets rather than Guava provided Charsets</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Charsets</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Charsets.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided Optional</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Optional</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Optional.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided Function</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Function</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Function.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided Predicate</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Predicate</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Predicate.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided Supplier</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Supplier</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Supplier.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use alternative to Guava provided ImmutableListMultimap</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.ImmutableListMultimap</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.collect.ImmutableListMultimap.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use hadoop-common provided Preconditions rather than Guava provided</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Preconditions</bannedImport>
-                      <bannedImport>org.apache.hadoop.thirdparty.com.google.common.base.Preconditions.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use Fasterxml Jackson 2 dependency in place of org.codehaus Jackson 1</reason>
-                    <bannedImports>
-                      <bannedImport>org.codehaus.jackson.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use HttpServlet APIs instead</reason>
-                    <bannedImports>
-                      <bannedImport>org.glassfish.grizzly</bannedImport>
-                      <bannedImport>org.glassfish.grizzly.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use slf4j based Logger</reason>
-                    <bannedImports>
-                      <bannedImport>org.apache.commons.logging.**</bannedImport>
-                    </bannedImports>
-                  </restrictImports>
-                  <restrictImports>
-                    <includeTestCode>true</includeTestCode>
-                    <reason>Use JUnit5</reason>
-                    <bannedImports>
-                      <bannedImport>org.junit.**</bannedImport>
-                    </bannedImports>
-                    <allowedImports>
-                      <allowedImport>org.junit.jupiter.**</allowedImport>
-                      <allowedImport>org.junit.platform.**</allowedImport>
-                    </allowedImports>
-                  </restrictImports>
-                </rules>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>${maven-assembly-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>${maven-deploy-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.rat</groupId>
-          <artifactId>apache-rat-plugin</artifactId>
-          <version>${apache-rat-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>${maven-antrun-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>${maven-site-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <!-- add support for ssh/scp -->
-              <groupId>org.apache.maven.wagon</groupId>
-              <artifactId>wagon-ssh</artifactId>
-              <version>${wagon-ssh.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only.
-        It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>${lifecycle-mapping.version}</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <versionRange>[1.7,)</versionRange>
-                    <goals>
-                      <goal>run</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <versionRange>[2.2,)</versionRange>
-                    <goals>
-                      <goal>testResources</goal>
-                      <goal>resources</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro-maven-plugin</artifactId>
-                    <versionRange>[1.5.3,)</versionRange>
-                    <goals>
-                      <goal>schema</goal>
-                      <goal>protocol</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo.jspc</groupId>
-                    <artifactId>jspc-maven-plugin</artifactId>
-                    <versionRange>[2.0-alpha-3,)</versionRange>
-                    <goals>
-                      <goal>compile</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[2.4,)</versionRange>
-                    <goals>
-                      <goal>copy-dependencies</goal>
-                      <goal>build-classpath</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <versionRange>[1.2,)</versionRange>
-                    <goals>
-                      <goal>exec</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <versionRange>[2.3.1,)</versionRange>
-                    <goals>
-                      <goal>test-jar</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.openclover</groupId>
-          <artifactId>clover-maven-plugin</artifactId>
-          <version>${clover-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>${maven-bundle-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>${maven-checkstyle-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.hadoop</groupId>
-              <artifactId>hadoop-build-tools</artifactId>
-              <version>${hadoop.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.puppycrawl.tools</groupId>
-              <artifactId>checkstyle</artifactId>
-              <version>${checkstyle.version}</version>
-            </dependency>
-          </dependencies>
-          <configuration>
-            <configLocation>checkstyle/checkstyle.xml</configLocation>
-            <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
-            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-            <failOnViolation>false</failOnViolation>
-            <outputFile>${project.build.directory}/test/checkstyle-errors.xml</outputFile>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>${dependency-check-maven.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>${spotbugs-maven-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>com.github.spotbugs</groupId>
-              <artifactId>spotbugs</artifactId>
-              <version>${spotbugs.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.jsonschema2pojo</groupId>
-          <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-          <version>${jsonschema2pojo-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven-compiler-plugin.version}</version>
-          <configuration>
-            <release>${javac.version}</release>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+    <!--
+    Include all files in src/main/resources.  By default, do not apply property
+    substitution (filtering=false), but do apply property substitution to
+    common-version-info.properties (filtering=true).  This will substitute the
+    version information correctly, but prevent Maven from altering other files
+    like core-default.xml.
+    -->
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <excludes>
+          <exclude>common-version-info.properties</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>common-version-info.properties</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <inherited>false</inherited>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>clean</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>pre-clean</phase>
-          </execution>
-          <execution>
-            <id>default</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
-          <execution>
-            <id>site</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>pre-site</phase>
-          </execution>
-          <execution>
-            <id>enforce-property</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
+            <id>src-compile-protoc</id>
             <configuration>
-              <rules>
-                <requireProperty>
-                  <property>hadoop.version</property>
-                  <message>You must set a hadoop.version to be the same as ${project.version}</message>
-                  <regex>${project.version}</regex>
-                  <regexMessage>The hadoop.version property should be set and should be ${project.version}.</regexMessage>
-                </requireProperty>
-              </rules>
-              <fail>true</fail>
+              <skip>false</skip>
+              <excludes>
+                <exclude>ProtobufRpcEngine.proto</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>src-test-compile-protoc</id>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>*legacy.proto</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <executions>
+          <execution>
+            <id>replace-generated-sources</id>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>**/ProtobufRpcEngineProtos.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>replace-generated-test-sources</id>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>**/TestProtosLegacy.java</exclude>
+                <exclude>**/TestRpcServiceProtosLegacy.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>replace-sources</id>
+            <configuration>
+              <skip>false</skip>
+              <!--These classes have direct Protobuf references for backward compatibility reasons-->
+              <excludes>
+                <exclude>**/ProtobufHelper.java</exclude>
+                <exclude>**/ProtobufRpcEngineCallback.java</exclude>
+                <exclude>**/ProtobufRpcEngine.java</exclude>
+                <exclude>**/ProtobufRpcEngine2.java</exclude>
+                <exclude>**/ProtobufRpcEngineProtos.java</exclude>
+                <exclude>**/ProtobufWrapperLegacy.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>replace-test-sources</id>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>**/TestProtoBufRpc.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-maven-plugins</artifactId>
+        <executions>
+          <execution>
+            <id>version-info</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>version-info</goal>
+            </goals>
+            <configuration>
+              <source>
+                <directory>${basedir}/src/main</directory>
+                <includes>
+                  <include>java/**/*.java</include>
+                  <include>proto/**/*.proto</include>
+                </includes>
+              </source>
+            </configuration>
+          </execution>
+          <execution>
+            <id>resource-gz</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>resource-gz</goal>
+            </goals>
+            <configuration>
+              <inputDirectory>${basedir}/src/main/webapps/static</inputDirectory>
+              <outputDirectory>${basedir}/target/webapps/static</outputDirectory>
+              <extensions>js,css</extensions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <runningWithNative>${runningWithNative}</runningWithNative>
+          </systemPropertyVariables>
+          <properties>
+            <property>
+              <name>listener</name>
+              <value>org.apache.hadoop.test.TimedOutTestsListener</value>
+            </property>
+          </properties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-avro-test-sources</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>schema</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <testOutputDirectory>${project.build.directory}/generated-test-sources/java</testOutputDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-log-dir</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <!--
+                TODO: there are tests (TestLocalFileSystem#testCopy) that fail if data
+                TODO: from a previous run is present
+                -->
+                <delete dir="${test.build.data}"/>
+                <mkdir dir="${test.build.data}"/>
+                <mkdir dir="${hadoop.log.dir}"/>
+
+                <copy toDir="${project.build.directory}/test-classes">
+                  <fileset dir="${basedir}/src/main/conf"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <copy file="src/main/resources/core-default.xml" todir="src/site/resources"/>
+                <copy file="src/main/xsl/configuration.xsl" todir="src/site/resources"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>.gitattributes</exclude>
-            <exclude>.gitignore</exclude>
-            <exclude>.git/**</exclude>
-            <exclude>.github/pull_request_template.md</exclude>
             <exclude>.idea/**</exclude>
-            <exclude>.mvn/*.config</exclude>
-            <exclude>**/build/**</exclude>
-            <exclude>**/dependency-reduced-pom.xml</exclude>
-            <exclude>**/patchprocess/**</exclude>
-            <exclude>**/*.js</exclude>
-            <exclude>licenses/**</exclude>
-            <exclude>licenses-binary/**</exclude>
-            <exclude>dev-support/docker/pkg-resolver/packages.json</exclude>
-            <exclude>dev-support/docker/pkg-resolver/platforms.json</exclude>
-            <exclude>dev-support/docker/vcpkg/vcpkg.json</exclude>
-            <exclude>**/target/**</exclude>
+            <exclude>src/main/conf/*</exclude>
+            <exclude>dev-support/jdiff/**</exclude>
+            <exclude>src/main/native/*</exclude>
+            <exclude>src/main/native/config/*</exclude>
+            <exclude>src/main/native/m4/*</exclude>
+            <exclude>src/main/winutils/winutils.sln</exclude>
+            <exclude>src/test/empty-file</exclude>
+            <exclude>src/test/all-tests</exclude>
+            <exclude>src/main/native/gtest/**/*</exclude>
+            <exclude>src/test/resources/test-untar.tgz</exclude>
+            <exclude>src/test/resources/test.har/_SUCCESS</exclude>
+            <exclude>src/test/resources/test.har/_index</exclude>
+            <exclude>src/test/resources/test.har/_masterindex</exclude>
+            <exclude>src/test/resources/test.har/part-0</exclude>
+            <exclude>src/test/resources/javakeystoreprovider.password</exclude>
+            <exclude>src/test/resources/lz4/sequencefile</exclude>
+            <exclude>dev-support/jdiff-workaround.patch</exclude>
           </excludes>
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-site-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
         <executions>
-          <execution>
-            <id>attach-descriptor</id>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
+            <execution>
+                <id>shelldocs</id>
+                <phase>pre-site</phase>
+                <goals>
+                    <goal>exec</goal>
+                </goals>
+                <configuration>
+                    <executable>${shell-executable}</executable>
+                    <workingDirectory>src/site/markdown</workingDirectory>
+                    <arguments>
+                        <argument>${basedir}/../../dev-support/bin/shelldocs</argument>
+                        <argument>--skipprnorep</argument>
+                        <argument>--output</argument>
+                        <argument>${basedir}/src/site/markdown/UnixShellAPI.md</argument>
+                        <argument>--input</argument>
+                        <argument>${basedir}/src/main/bin/hadoop-functions.sh</argument>
+                    </arguments>
+                </configuration>
+            </execution>
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <inherited>true</inherited>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <!-- OWASP's dependency-check plugin will scan the third party
-             dependencies of this project for known CVEs (security
-             vulnerabilities against them). It will produce a report
-             in target/dependency-check-report.html. To invoke, run
-             'mvn dependency-check:aggregate'.
-        -->
-        <groupId>org.owasp</groupId>
-        <artifactId>dependency-check-maven</artifactId>
-        <version>${dependency-check-maven.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.cyclonedx</groupId>
-        <artifactId>cyclonedx-maven-plugin</artifactId>
-        <version>${cyclonedx.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
+        <artifactId>maven-clean-plugin</artifactId>
         <configuration>
-          <gpgArguments>
-            <arg>--pinentry-mode</arg>
-            <arg>loopback</arg>
-          </gpgArguments>
+          <filesets>
+            <fileset>
+              <directory>src/site/markdown</directory>
+                <includes>
+                  <include>UnixShellAPI.md</include>
+                </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>src/site/resources</directory>
+                <includes>
+                  <include>configuration.xsl</include>
+                  <include>core-default.xml</include>
+                </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <sourceFileExcludes>
+            <sourceFileExclude>**/FSProtos.java</sourceFileExclude>
+          </sourceFileExcludes>
+          <excludePackageNames>*.proto:*.tracing:*.protobuf</excludePackageNames>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  <reporting>
-    <excludeDefaults>true</excludeDefaults>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${maven-javadoc-plugin.version}</version>
-        <inherited>false</inherited>
-        <reportSets>
-          <reportSet>
-            <id>aggregate</id>
-            <configuration>
-              <quiet>true</quiet>
-              <verbose>false</verbose>
-              <legacyMode>true</legacyMode>
-              <source>${maven.compile.source}</source>
-              <charset>${maven.compile.encoding}</charset>
-              <reportOutputDirectory>${project.build.directory}/site</reportOutputDirectory>
-              <destDir>hadoop-project/api</destDir>
-              <!-- Non-public APIs -->
-              <excludePackageNames>org.apache.hadoop.authentication*,org.apache.hadoop.mapreduce.v2.proto,org.apache.hadoop.yarn.proto,org.apache.hadoop.yarn.server*,org.apache.hadoop.yarn.webapp*</excludePackageNames>
-              <groups>
-                <group>
-                  <title>Common</title>
-                  <packages>org.apache.hadoop*</packages>
-                </group>
-                <group>
-                  <title>HDFS</title>
-                  <packages>org.apache.hadoop.hdfs*</packages>
-                </group>
-                <group>
-                  <title>MapReduce</title>
-                  <packages>org.apache.hadoop.mapred*</packages>
-                </group>
-                <group>
-                  <title>YARN</title>
-                  <packages>org.apache.hadoop.yarn*</packages>
-                </group>
-              </groups>
-              <doclet>org.apache.hadoop.classification.tools.IncludePublicAnnotationsStandardDoclet</doclet>
-              <docletArtifacts>
-                <docletArtifact>
-                  <groupId>org.apache.hadoop</groupId>
-                  <artifactId>hadoop-annotations</artifactId>
-                  <version>${project.version}</version>
-                </docletArtifact>
-              </docletArtifacts>
-              <additionalJOptions>
-                <!-- To fix doclet runtime error -->
-                <additionalJOption>-J--add-exports=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
-              </additionalJOptions>
-              <additionalOptions>
-                <!-- To fix doclet compile error -->
-                <additionalOption>--add-exports</additionalOption>
-                <additionalOption>jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalOption>
-              </additionalOptions>
-              <!-- switch on dependency-driven aggregation -->
-              <includeDependencySources>false</includeDependencySources>
-              <dependencySourceIncludes>
-                <!-- include ONLY dependencies I control -->
-                <dependencySourceInclude>org.apache.hadoop:hadoop-annotations</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <additionalDependencies>
-                <additionalDependency>
-                  <groupId>org.apache.hadoop</groupId>
-                  <artifactId>hadoop-hdfs</artifactId>
-                  <version>${project.version}</version>
-                  <classifier>tests</classifier>
-                </additionalDependency>
-              </additionalDependencies>
-            </configuration>
-            <reports>
-              <report>aggregate</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${maven-dependency-plugin.version}</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>analyze-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
+
   <profiles>
     <profile>
-      <id>src</id>
+      <id>native</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
+      <properties>
+        <require.bzip2>false</require.bzip2>
+        <zstd.prefix></zstd.prefix>
+        <zstd.lib></zstd.lib>
+        <zstd.include></zstd.include>
+        <require.zstd>false</require.zstd>
+        <openssl.prefix></openssl.prefix>
+        <openssl.lib></openssl.lib>
+        <openssl.include></openssl.include>
+        <require.isal>false</require.isal>
+        <isal.prefix></isal.prefix>
+        <isal.lib></isal.lib>
+        <require.openssl>false</require.openssl>
+        <runningWithNative>true</runningWithNative>
+        <bundle.openssl.in.bin>false</bundle.openssl.in.bin>
+        <extra.libhadoop.rpath></extra.libhadoop.rpath>
+      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <inherited>false</inherited>
+            <artifactId>maven-enforcer-plugin</artifactId>
             <executions>
               <execution>
-                <id>src-dist</id>
-                <phase>package</phase>
+                <id>enforce-os</id>
                 <goals>
-                  <goal>single</goal>
+                  <goal>enforce</goal>
                 </goals>
                 <configuration>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <attach>false</attach>
-                  <finalName>hadoop-${project.version}-src</finalName>
-                  <outputDirectory>hadoop-dist/target</outputDirectory>
-                  <!-- Not using descriptorRef and hadoop-assembly dependency -->
-                  <!-- to avoid making hadoop-main to depend on a module      -->
-                  <descriptors>
-                    <descriptor>hadoop-assemblies/src/main/resources/assemblies/hadoop-src.xml</descriptor>
-                  </descriptors>
+                  <rules>
+                    <requireOS>
+                      <family>mac</family>
+                      <family>unix</family>
+                      <message>native build only supported on Mac or Unix</message>
+                    </requireOS>
+                  </rules>
+                  <fail>true</fail>
                 </configuration>
               </execution>
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <inherited>false</inherited>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-maven-plugins</artifactId>
             <executions>
               <execution>
-                <id>src-dist-msg</id>
-                <phase>package</phase>
+                <id>cmake-compile</id>
+                <phase>compile</phase>
+                <goals><goal>cmake-compile</goal></goals>
+                <configuration>
+                  <source>${basedir}/src</source>
+                  <vars>
+                    <GENERATED_JAVAH>${project.build.directory}/native/javah</GENERATED_JAVAH>
+                    <JVM_ARCH_DATA_MODEL>${sun.arch.data.model}</JVM_ARCH_DATA_MODEL>
+                    <REQUIRE_BZIP2>${require.bzip2}</REQUIRE_BZIP2>
+                    <REQUIRE_ZSTD>${require.zstd}</REQUIRE_ZSTD>
+                    <CUSTOM_ZSTD_PREFIX>${zstd.prefix}</CUSTOM_ZSTD_PREFIX>
+                    <CUSTOM_ZSTD_LIB>${zstd.lib} </CUSTOM_ZSTD_LIB>
+                    <CUSTOM_ZSTD_INCLUDE>${zstd.include} </CUSTOM_ZSTD_INCLUDE>
+                    <REQUIRE_ISAL>${require.isal} </REQUIRE_ISAL>
+                    <CUSTOM_ISAL_PREFIX>${isal.prefix} </CUSTOM_ISAL_PREFIX>
+                    <CUSTOM_ISAL_LIB>${isal.lib} </CUSTOM_ISAL_LIB>
+                    <REQUIRE_PMDK>${require.pmdk}</REQUIRE_PMDK>
+                    <CUSTOM_PMDK_LIB>${pmdk.lib}</CUSTOM_PMDK_LIB>
+                    <REQUIRE_OPENSSL>${require.openssl} </REQUIRE_OPENSSL>
+                    <CUSTOM_OPENSSL_PREFIX>${openssl.prefix} </CUSTOM_OPENSSL_PREFIX>
+                    <CUSTOM_OPENSSL_LIB>${openssl.lib} </CUSTOM_OPENSSL_LIB>
+                    <CUSTOM_OPENSSL_INCLUDE>${openssl.include} </CUSTOM_OPENSSL_INCLUDE>
+                    <EXTRA_LIBHADOOP_RPATH>${extra.libhadoop.rpath}</EXTRA_LIBHADOOP_RPATH>
+                  </vars>
+                </configuration>
+              </execution>
+              <execution>
+                <id>test_bulk_crc32</id>
+                <goals><goal>cmake-test</goal></goals>
+                <phase>test</phase>
+                <configuration>
+                  <binary>${project.build.directory}/native/test_bulk_crc32</binary>
+                  <timeout>1200</timeout>
+                  <results>${project.build.directory}/native-results</results>
+                </configuration>
+              </execution>
+              <execution>
+                <id>erasure_code_test</id>
+                <goals><goal>cmake-test</goal></goals>
+                <phase>test</phase>
+                <configuration>
+                  <binary>${project.build.directory}/native/erasure_code_test</binary>
+                  <timeout>300</timeout>
+                  <results>${project.build.directory}/native-results</results>
+                  <skipIfMissing>true</skipIfMissing>
+                  <env>
+                    <LD_LIBRARY_PATH>${LD_LIBRARY_PATH}:${isal.lib}:${isal.prefix}:/usr/lib</LD_LIBRARY_PATH>
+                  </env>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>native-win</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <require.isal>false</require.isal>
+        <isal.prefix></isal.prefix>
+        <isal.lib></isal.lib>
+        <zstd.prefix></zstd.prefix>
+        <zstd.lib></zstd.lib>
+        <zstd.include></zstd.include>
+        <require.zstd>false</require.zstd>
+        <bundle.zstd.in.bin>true</bundle.zstd.in.bin>
+        <openssl.prefix></openssl.prefix>
+        <openssl.lib></openssl.lib>
+        <openssl.include></openssl.include>
+        <require.openssl>false</require.openssl>
+        <runningWithNative>true</runningWithNative>
+        <bundle.openssl.in.bin>false</bundle.openssl.in.bin>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-os</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireOS>
+                      <family>windows</family>
+                      <message>native-win build only supported on Windows</message>
+                    </requireOS>
+                  </rules>
+                  <fail>true</fail>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <!--Sets the skip.platformToolsetDetection to true if use.platformToolsetVersion is specified.
+            This implies that the automatic detection of which platform toolset to use will be skipped
+            and the one specified with use.platformToolsetVersion will be used.-->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+              <execution>
+                <phase>validate</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
                 <configuration>
+                  <exportAntProperties>true</exportAntProperties>
                   <target>
-                    <echo/>
-                    <echo>Hadoop source tar available at: ${basedir}/hadoop-dist/target/hadoop-${project.version}-src.tar.gz</echo>
-                    <echo/>
+                    <condition property="skip.platformToolsetDetection" value="true" else="false">
+                      <isset property="use.platformToolsetVersion"/>
+                    </condition>
+                    <!--Unfortunately, Maven doesn't have a way to negate a flag, thus we declare a
+                     property which holds the negated value of skip.platformToolsetDetection.-->
+                    <condition property="skip.platformToolsetDetection.negated" value="false" else="true">
+                      <isset property="use.platformToolsetVersion"/>
+                    </condition>
+                    <echo>Skip platform toolset version detection = ${skip.platformToolsetDetection}</echo>
                   </target>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>dist</id>
-      <build>
-        <plugins>
           <plugin>
-            <groupId>org.cyclonedx</groupId>
-            <artifactId>cyclonedx-maven-plugin</artifactId>
-            <version>${cyclonedx.version}</version>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
             <executions>
               <execution>
-                <phase>package</phase>
+                <id>convert-ms-winutils</id>
+                <phase>generate-sources</phase>
                 <goals>
-                  <goal>makeBom</goal>
+                  <goal>exec</goal>
                 </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection}</skip>
+                  <executable>${basedir}\..\..\dev-support\bin\win-vs-upgrade.cmd</executable>
+                  <arguments>
+                    <argument>${basedir}\src\main\winutils</argument>
+                    <argument>${project.build.directory}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>compile-ms-winutils</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection}</skip>
+                  <executable>msbuild</executable>
+                  <arguments>
+                    <argument>${basedir}/src/main/winutils/winutils.sln</argument>
+                    <argument>/nologo</argument>
+                    <argument>/p:Configuration=Release</argument>
+                    <argument>/p:OutDir=${project.build.directory}/bin/</argument>
+                    <argument>/p:IntermediateOutputPath=${project.build.directory}/winutils/</argument>
+                    <argument>/p:WsceConfigDir=${wsce.config.dir}</argument>
+                    <argument>/p:WsceConfigFile=${wsce.config.file}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>compile-ms-winutils-using-build-tools</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection.negated}</skip>
+                  <executable>msbuild</executable>
+                  <arguments>
+                    <argument>${basedir}/src/main/winutils/winutils.sln</argument>
+                    <argument>/nologo</argument>
+                    <argument>/p:Configuration=Release</argument>
+                    <argument>/p:OutDir=${project.build.directory}/bin/</argument>
+                    <argument>/p:IntermediateOutputPath=${project.build.directory}/winutils/</argument>
+                    <argument>/p:WsceConfigDir=${wsce.config.dir}</argument>
+                    <argument>/p:WsceConfigFile=${wsce.config.file}</argument>
+                    <argument>/p:PlatformToolset=${use.platformToolsetVersion}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>convert-ms-native-dll</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection}</skip>
+                  <executable>${basedir}\..\..\dev-support\bin\win-vs-upgrade.cmd</executable>
+                  <arguments>
+                    <argument>${basedir}\src\main\native</argument>
+                    <argument>${project.build.directory}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>compile-ms-native-dll</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection}</skip>
+                  <executable>msbuild</executable>
+                  <arguments>
+                    <argument>${basedir}/src/main/native/native.sln</argument>
+                    <argument>/nologo</argument>
+                    <argument>/p:Configuration=Release</argument>
+                    <argument>/p:OutDir=${project.build.directory}/bin/</argument>
+                    <argument>/p:CustomZstdPrefix=${zstd.prefix}</argument>
+                    <argument>/p:CustomZstdLib=${zstd.lib}</argument>
+                    <argument>/p:CustomZstdInclude=${zstd.include}</argument>
+                    <argument>/p:RequireZstd=${require.zstd}</argument>
+                    <argument>/p:CustomOpensslPrefix=${openssl.prefix}</argument>
+                    <argument>/p:CustomOpensslLib=${openssl.lib}</argument>
+                    <argument>/p:CustomOpensslInclude=${openssl.include}</argument>
+                    <argument>/p:RequireOpenssl=${require.openssl}</argument>
+                    <argument>/p:RequireIsal=${require.isal}</argument>
+                    <argument>/p:CustomIsalPrefix=${isal.prefix}</argument>
+                    <argument>/p:CustomIsalLib=${isal.lib}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>compile-ms-native-dll-using-build-tools</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>${skip.platformToolsetDetection.negated}</skip>
+                  <executable>msbuild</executable>
+                  <arguments>
+                    <argument>${basedir}/src/main/native/native.sln</argument>
+                    <argument>/nologo</argument>
+                    <argument>/p:Configuration=Release</argument>
+                    <argument>/p:OutDir=${project.build.directory}/bin/</argument>
+                    <argument>/p:CustomZstdPrefix=${zstd.prefix}</argument>
+                    <argument>/p:CustomZstdLib=${zstd.lib}</argument>
+                    <argument>/p:CustomZstdInclude=${zstd.include}</argument>
+                    <argument>/p:RequireZstd=${require.zstd}</argument>
+                    <argument>/p:CustomOpensslPrefix=${openssl.prefix}</argument>
+                    <argument>/p:CustomOpensslLib=${openssl.lib}</argument>
+                    <argument>/p:CustomOpensslInclude=${openssl.include}</argument>
+                    <argument>/p:RequireOpenssl=${require.openssl}</argument>
+                    <argument>/p:RequireIsal=${require.isal}</argument>
+                    <argument>/p:CustomIsalPrefix=${isal.prefix}</argument>
+                    <argument>/p:CustomIsalLib=${isal.lib}</argument>
+                    <argument>/p:PlatformToolset=${use.platformToolsetVersion}</argument>
+                  </arguments>
+                </configuration>
               </execution>
             </executions>
-            <configuration>
-              <outputFormat>xml</outputFormat>
-            </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
     <profile>
-      <id>sign</id>
+      <id>parallel-tests</id>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-maven-plugins</artifactId>
+            <executions>
+              <execution>
+                <id>parallel-tests-createdir</id>
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>parallel-tests-createdir</goal>
+                </goals>
+                <configuration>
+                  <testBuildData>${test.build.data}</testBuildData>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>${maven-gpg-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <forkCount>${testsThreadCount}</forkCount>
+              <reuseForks>false</reuseForks>
+              <argLine>${maven-surefire-plugin.argLine} -DminiClusterDedicatedDirs=true</argLine>
+              <systemPropertyVariables>
+                <testsThreadCount>${testsThreadCount}</testsThreadCount>
+                <test.build.data>${test.build.data}/${surefire.forkNumber}</test.build.data>
+                <test.build.dir>${test.build.dir}/${surefire.forkNumber}</test.build.dir>
+                <hadoop.tmp.dir>${hadoop.tmp.dir}/${surefire.forkNumber}</hadoop.tmp.dir>
+
+                <!-- Due to a Maven quirk, setting this to just -->
+                <!-- surefire.forkNumber won't do the parameter substitution. -->
+                <!-- Putting a prefix in front of it like "fork-" makes it -->
+                <!-- work. -->
+                <test.unique.fork.id>fork-${surefire.forkNumber}</test.unique.fork.id>
+              </systemPropertyVariables>
+            </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
+
     <profile>
-      <id>clover</id>
+      <id>releasedocs</id>
       <activation>
         <activeByDefault>false</activeByDefault>
-        <property>
-          <name>clover</name>
-        </property>
       </activation>
-      <properties>
-        <cloverDatabase>${project.build.directory}/clover/hadoop-coverage.db</cloverDatabase>
-        <!-- NB: This additional parametrization is made in order
-             to be able to re-define these properties with "-Dk=v" maven options.
-             By some reason the expressions declared in clover
-             docs like "${maven.clover.generateHtml}" do not work in that way.
-             However, the below properties are confirmed to work: e.g.
-             -DcloverGenHtml=false switches off the Html generation.
-             The default values provided here exactly correspond to Clover defaults, so
-             the behavior is 100% backwards compatible. -->
-        <cloverAlwaysReport>true</cloverAlwaysReport>
-        <cloverGenHtml>true</cloverGenHtml>
-        <cloverGenXml>true</cloverGenXml>
-        <cloverGenHistorical>false</cloverGenHistorical>
-      </properties>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.openclover</groupId>
-            <artifactId>clover-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>releasedocs</id>
+                    <phase>pre-site</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <executable>${shell-executable}</executable>
+                        <arguments>
+                            <argument>${basedir}/../../dev-support/bin/releasedocmaker</argument>
+                            <argument>--index</argument>
+                            <argument>--license</argument>
+                            <argument>--outputdir</argument>
+                            <argument>${basedir}/src/site/markdown/release</argument>
+                            <argument>--project</argument>
+                            <argument>HADOOP</argument>
+                            <argument>--project</argument>
+                            <argument>HDFS</argument>
+                            <argument>--project</argument>
+                            <argument>MAPREDUCE</argument>
+                            <argument>--project</argument>
+                            <argument>YARN</argument>
+                            <argument>--projecttitle</argument>
+                            <argument>Apache Hadoop</argument>
+                            <argument>--usetoday</argument>
+                            <argument>--fileversions</argument>
+                            <argument>--dirversions</argument>
+                            <argument>--version</argument>
+                            <argument>3.5.0</argument>
+                        </arguments>
+                    </configuration>
+                </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
             <configuration>
-              <includesAllSourceRoots>false</includesAllSourceRoots>
-              <includesTestSourceRoots>true</includesTestSourceRoots>
-              <cloverDatabase>${cloverDatabase}</cloverDatabase>
-              <targetPercentage>50%</targetPercentage>
-              <outputDirectory>${project.build.directory}/clover</outputDirectory>
-              <alwaysReport>${cloverAlwaysReport}</alwaysReport>
-              <generateHtml>${cloverGenHtml}</generateHtml>
-              <generateXml>${cloverGenXml}</generateXml>
-              <generateHistorical>${cloverGenHistorical}</generateHistorical>
-              <excludes>
-                <exclude>**/examples/**/*.java</exclude>
-                <exclude>**/hamlet/*.java</exclude>
-                <exclude>**/ha/proto/*.java</exclude>
-                <exclude>**/protocol/proto/*.java</exclude>
-                <exclude>**/compiler/generated/*.java</exclude>
-                <exclude>**/protobuf/*.java</exclude>
-                <exclude>**/v2/proto/*.java</exclude>
-                <exclude>**/yarn/proto/*.java</exclude>
-                <exclude>**/security/proto/*.java</exclude>
-                <exclude>**/tools/proto/*.java</exclude>
-                <exclude>**/hs/proto/*.java</exclude>
-              </excludes>
+              <filesets>
+                <fileset>
+                  <directory>src/site/markdown/release</directory>
+                    <includes>
+                      <include>3.5.0/</include>
+                      <include>index.md</include>
+                    </includes>
+                  <followSymlinks>false</followSymlinks>
+                </fileset>
+              </filesets>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- profile to test shell code -->
+    <profile>
+      <id>shelltest</id>
+      <activation>
+        <property>
+          <name>!skipTests</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>common-test-bats-driver</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                      <target>
+                          <exec dir="src/test/scripts"
+                           executable="bash"
+                           failonerror="true">
+                           <arg value="./run-bats.sh" />
+                         </exec>
+                      </target>
+                    </configuration>
+                </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- profile to use already generated protobuf code using 2.5.0 for non-x86_64-->
+    <profile>
+      <id>non-x86_64</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <os>
+          <arch>!x86_64</arch>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>clover-setup</id>
-                <phase>process-sources</phase>
+                <id>add-source-legacy-protobuf</id>
+                <phase>generate-sources</phase>
                 <goals>
-                  <goal>setup</goal>
+                  <goal>add-source</goal>
                 </goals>
+                <configuration>
+                  <sources>
+                    <source>${basedir}/src/main/proto2-generated</source>
+                  </sources>
+                </configuration>
               </execution>
               <execution>
-                <id>clover</id>
-                <phase>test</phase>
+                <id>add-test-source-legacy-protobuf</id>
+                <phase>generate-test-sources</phase>
                 <goals>
-                  <goal>clover</goal>
+                  <goal>add-test-source</goal>
                 </goals>
+                <configuration>
+                  <sources>
+                    <source>${basedir}/src/test/proto2-generated</source>
+                  </sources>
+                </configuration>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
     </profile>
+    <!-- profile to generate protobuf code using 2.5.0-->
     <profile>
-      <id>aarch64</id>
-      <properties>
-        <leveldbjni.group>org.openlabtesting.leveldbjni</leveldbjni.group>
-      </properties>
+      <id>x86_64</id>
       <activation>
+        <activeByDefault>false</activeByDefault>
         <os>
-          <family>linux</family>
-          <arch>aarch64</arch>
+          <arch>x86_64</arch>
         </os>
       </activation>
-    </profile>
-    <profile>
-      <id>docker-build</id>
-      <properties>
-        <docker.image>${user.name}/hadoop:${project.version}</docker.image>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.xolstice.maven.plugins</groupId>
+            <artifactId>protobuf-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                <id>src-compile-protoc-legacy</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <skip>false</skip>
+                  <!--Generating with old protobuf version for backward compatibility-->
+                  <protocArtifact>
+                    com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                  </protocArtifact>
+                  <includeDependenciesInDescriptorSet>false</includeDependenciesInDescriptorSet>
+                  <protoSourceRoot>${basedir}/src/main/proto</protoSourceRoot>
+                  <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+                  <clearOutputDirectory>false</clearOutputDirectory>
+                  <includes>
+                    <include>ProtobufRpcEngine.proto</include>
+                  </includes>
+                </configuration>
+              </execution>
+              <execution>
+                <id>src-test-compile-protoc-legacy</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                  <goal>test-compile</goal>
+                </goals>
+                <configuration>
+                  <skip>false</skip>
+                  <!--Generating with old protobuf version for backward compatibility-->
+                  <protocArtifact>
+                    com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                  </protocArtifact>
+                  <includeDependenciesInDescriptorSet>false</includeDependenciesInDescriptorSet>
+                  <protoTestSourceRoot>${basedir}/src/test/proto</protoTestSourceRoot>
+                  <outputDirectory>${project.build.directory}/generated-test-sources/java</outputDirectory>
+                  <clearOutputDirectory>false</clearOutputDirectory>
+                  <includes>
+                    <include>test_legacy.proto</include>
+                    <include>test_rpc_service_legacy.proto</include>
+                  </includes>
+                </configuration>
+              </execution>
+             </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
-  <scm>
-    <connection>scm:git:apache-hadoop</connection>
-    <developerConnection>scm:git:apache-hadoop</developerConnection>
-    <url>apache-hadoop</url>
-    <tag>3.5.0-lineaje-01</tag>
-  </scm>
-  <contributors>
-    <contributor>
-      <name>Lineaje DepFixer</name>
-      <email>221268890+Lineaje-DepFixer@users.noreply.github.com</email>
-    </contributor>
-  </contributors>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-http</artifactId>
+        <version>9.4.57.v20241219</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
+
