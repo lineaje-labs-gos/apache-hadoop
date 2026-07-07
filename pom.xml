@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -12,17 +11,14 @@
   See the License for the specific language governing permissions and
   limitations under the License. See accompanying LICENSE file.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.hadoop</groupId>
   <artifactId>hadoop-main</artifactId>
-  <version>3.5.0</version>
+  <version>3.5.0-lineaje-01</version>
   <description>Apache Hadoop Main</description>
   <name>Apache Hadoop Main</name>
   <packaging>pom</packaging>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -33,7 +29,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <distributionManagement>
     <repository>
       <id>${distMgmtStagingId}</id>
@@ -50,7 +45,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       <url>scpexe://people.apache.org/www/hadoop.apache.org/docs/r${project.version}</url>
     </site>
   </distributionManagement>
-
   <repositories>
     <repository>
       <id>${distMgmtSnapshotsId}</id>
@@ -68,36 +62,29 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </snapshots>
     </repository>
   </repositories>
-
   <licenses>
     <license>
       <name>Apache-2.0</name>
       <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-
   <organization>
     <name>Apache Software Foundation</name>
     <url>https://www.apache.org</url>
   </organization>
-
   <properties>
     <!-- required as child projects with different version can't use ${project.version} -->
     <hadoop.version>3.5.0</hadoop.version>
-
     <docker.image>apache/hadoop:${project.version}</docker.image>
-
     <distMgmtSnapshotsId>apache.snapshots.https</distMgmtSnapshotsId>
     <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
     <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
     <distMgmtStagingId>apache.staging.https</distMgmtStagingId>
     <distMgmtStagingName>Apache Release Distribution Repository</distMgmtStagingName>
     <distMgmtStagingUrl>https://repository.apache.org/service/local/staging/deploy/maven2</distMgmtStagingUrl>
-
     <!-- platform encoding override -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
     <!-- maven plugin versions -->
     <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
     <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
@@ -125,11 +112,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
     <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
     <cyclonedx.version>2.9.1</cyclonedx.version>
     <docker-maven-plugin.version>0.29.0</docker-maven-plugin.version>
-
     <shell-executable>bash</shell-executable>
-
     <leveldbjni.group>org.fusesource.leveldbjni</leveldbjni.group>
-
     <!--
      Surefire option to not fail a build if -Dtest=NAME doesn't find a
      test called NAME. This is needed when running integration tests through
@@ -137,10 +121,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
      running all unit tests before the it.test option is picked up.
     -->
     <surefire.failIfNoSpecifiedTests>false</surefire.failIfNoSpecifiedTests>
-
     <!-- define the Java language version used by the compiler -->
     <javac.version>17</javac.version>
-
     <!-- The java version enforced by the maven enforcer -->
     <!-- more complex patterns can be used here, such as
        [${javac.version})
@@ -149,7 +131,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
     <enforced.java.version>[${javac.version},)</enforced.java.version>
     <enforced.maven.version>[3.3.0,)</enforced.maven.version>
   </properties>
-
   <modules>
     <module>hadoop-project</module>
     <module>hadoop-project-dist</module>
@@ -166,7 +147,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
     <module>hadoop-cloud-storage-project</module>
     <module>hadoop-dist</module>
   </modules>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -334,15 +314,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </bannedImports>
                   </restrictImports>
                   <restrictImports>
-                     <includeTestCode>true</includeTestCode>
-                     <reason>Use JUnit5</reason>
-                     <bannedImports>
-                        <bannedImport>org.junit.**</bannedImport>
-                     </bannedImports>
-                     <allowedImports>
-                        <allowedImport>org.junit.jupiter.**</allowedImport>
-                        <allowedImport>org.junit.platform.**</allowedImport>
-                     </allowedImports>
+                    <includeTestCode>true</includeTestCode>
+                    <reason>Use JUnit5</reason>
+                    <bannedImports>
+                      <bannedImport>org.junit.**</bannedImport>
+                    </bannedImports>
+                    <allowedImports>
+                      <allowedImport>org.junit.jupiter.**</allowedImport>
+                      <allowedImport>org.junit.platform.**</allowedImport>
+                    </allowedImports>
                   </restrictImports>
                 </rules>
               </configuration>
@@ -374,7 +354,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin.version}</version>
           <dependencies>
-            <dependency><!-- add support for ssh/scp -->
+            <dependency>
+              <!-- add support for ssh/scp -->
               <groupId>org.apache.maven.wagon</groupId>
               <artifactId>wagon-ssh</artifactId>
               <version>${wagon-ssh.version}</version>
@@ -400,7 +381,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -414,7 +395,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -428,7 +409,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -441,7 +422,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -455,7 +436,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -468,7 +449,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -481,7 +462,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -554,7 +535,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         </plugin>
       </plugins>
     </pluginManagement>
-
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -597,14 +577,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                 </requireProperty>
               </rules>
               <fail>true</fail>
-              </configuration>
+            </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-       <configuration>
+        <configuration>
           <excludes>
             <exclude>.gitattributes</exclude>
             <exclude>.gitignore</exclude>
@@ -622,8 +602,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
             <exclude>dev-support/docker/pkg-resolver/platforms.json</exclude>
             <exclude>dev-support/docker/vcpkg/vcpkg.json</exclude>
             <exclude>**/target/**</exclude>
-         </excludes>
-       </configuration>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
@@ -667,9 +647,28 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <artifactId>cyclonedx-maven-plugin</artifactId>
         <version>${cyclonedx.version}</version>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <gpgArguments>
+            <arg>--pinentry-mode</arg>
+            <arg>loopback</arg>
+          </gpgArguments>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <reporting>
     <excludeDefaults>true</excludeDefaults>
     <plugins>
@@ -728,7 +727,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
               </additionalOptions>
               <!-- switch on dependency-driven aggregation -->
               <includeDependencySources>false</includeDependencySources>
-
               <dependencySourceIncludes>
                 <!-- include ONLY dependencies I control -->
                 <dependencySourceInclude>org.apache.hadoop:hadoop-annotations</dependencySourceInclude>
@@ -748,7 +746,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
           </reportSet>
         </reportSets>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -763,7 +760,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </plugin>
     </plugins>
   </reporting>
-
   <profiles>
     <profile>
       <id>src</id>
@@ -821,7 +817,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         </plugins>
       </build>
     </profile>
-
     <profile>
       <id>dist</id>
       <build>
@@ -845,7 +840,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         </plugins>
       </build>
     </profile>
-
     <profile>
       <id>sign</id>
       <build>
@@ -951,7 +945,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         </os>
       </activation>
     </profile>
-
     <profile>
       <id>docker-build</id>
       <properties>
@@ -959,4 +952,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </properties>
     </profile>
   </profiles>
+  <scm>
+    <connection>scm:git:apache-hadoop</connection>
+    <developerConnection>scm:git:apache-hadoop</developerConnection>
+    <url>apache-hadoop</url>
+    <tag>3.5.0-lineaje-01</tag>
+  </scm>
+  <contributors>
+    <contributor>
+      <name>Lineaje DepFixer</name>
+      <email>221268890+Lineaje-DepFixer@users.noreply.github.com</email>
+    </contributor>
+  </contributors>
 </project>
